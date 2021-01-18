@@ -4,6 +4,7 @@ Android port of voximorg/Coventina (WIP)
 # Usage
 ```shell
 git clone https://github.com/voximorg/Coventina-Android.git
+cd Coventina-Android
 git submodule update --init
 ```
 
