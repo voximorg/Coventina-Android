@@ -11,6 +11,7 @@ public class CoventinaView extends GLSurfaceView {
     public native void init();
     public native void resize(int width, int height);
     public native void redraw();
+    public native void pan(float x, float y);
 
     private long startTime;
 

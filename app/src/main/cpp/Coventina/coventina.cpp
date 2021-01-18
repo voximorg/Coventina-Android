@@ -1180,7 +1180,7 @@ namespace game
         pos += velocity * dt;
 
         isRotating = true;
-        yangle += (dt * 0.0005) / 5.0;
+        //yangle += (dt * 0.0005) / 5.0;
 
         if (yAngularVelocity > 0.01 || yAngularVelocity < -0.01)
         {
@@ -3456,6 +3456,8 @@ Java_org_voxim_coventinaandroid_CoventinaView_init(
     init();
 }
 
+static int width;
+static int height;
 JNIEXPORT void JNICALL
 Java_org_voxim_coventinaandroid_CoventinaView_resize(
         JNIEnv* env,
@@ -3467,6 +3469,9 @@ Java_org_voxim_coventinaandroid_CoventinaView_resize(
 {
     glViewport(0, 0, width, height);
     aspect_ratio = float(width)/float(height);
+
+    ::width = width;
+    ::height = height;
 }
 
 JNIEXPORT void JNICALL
@@ -3487,4 +3492,22 @@ jobject /* this */)
     loop::loop();
 }
 
+JNIEXPORT void JNICALL
+Java_org_voxim_coventinaandroid_CoventinaView_pan(
+        JNIEnv* env,
+        jobject, /* this */
+        jfloat x,
+        jfloat y)
+{
+    float plusx = x / float(width);
+    float plusy = y / float(height);
+
+    plusx *= 4;
+    plusy *= 4;
+
+    player.pointerMode = true;
+    player.setPointerDelta(plusx, plusy);
+
+    //LOGd("Pan: %f, %f", plusx, plusy);
+}
 }

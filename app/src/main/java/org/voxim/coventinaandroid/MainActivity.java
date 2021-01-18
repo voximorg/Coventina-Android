@@ -1,8 +1,12 @@
 package org.voxim.coventinaandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GestureDetectorCompat;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
@@ -12,18 +16,32 @@ public class MainActivity extends AppCompatActivity {
         System.loadLibrary("coventina");
     }
 
+    public static CoventinaView main_view;
+
+    private GestureDetectorCompat mDetector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try
-        {
+        try {
             this.getSupportActionBar().hide();
+        } catch (NullPointerException e) {
         }
-        catch (NullPointerException e){}
 
-        setContentView(new CoventinaView(getApplication()));
+        mDetector = new GestureDetectorCompat(this, new MyGestureListener());
+
+        main_view = new CoventinaView(getApplication());
+        setContentView(main_view);
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        this.mDetector.onTouchEvent(event);
+
+        return super.onTouchEvent(event);
+    }
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -60,4 +78,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        private static final String DEBUG_TAG = "Gestures";
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                                float distanceX, float distanceY) {
+
+
+            //Log.d(DEBUG_TAG, "onScroll: " + distanceX + " " + distanceY);
+
+            main_view.pan(distanceX, distanceY);
+
+            return true;
+        }
+
+    }
 }
